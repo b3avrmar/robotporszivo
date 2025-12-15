@@ -15,6 +15,7 @@ namespace robotporszivo
 
             char[,] palya = PalyaLetrehozasa(out robotSor, out robotOszlop);
 
+            PalyaMegjelenitese(palya);
 
             Console.WriteLine();
             Console.WriteLine("Robot kezdo pozicio: sor=" + robotSor + " oszlop=" + robotOszlop);
@@ -128,6 +129,34 @@ namespace robotporszivo
             palya[robotSor, robotOszlop] = 'r';
 
             return palya;
+        }
+        static void PalyaMegjelenitese(char[,] palya)
+        {
+            int sorok = palya.GetLength(0);
+            int oszlopok = palya.GetLength(1);
+
+            for (int i = 0; i < sorok; i++)
+            {
+                for (int j = 0; j < oszlopok; j++)
+                {
+                    char mezo = palya[i, j];
+
+                    if (mezo == '-') Console.ForegroundColor = ConsoleColor.DarkGray;
+                    else if (mezo == 'b') Console.ForegroundColor = ConsoleColor.Red;
+                    else if (mezo == 'k') Console.ForegroundColor = ConsoleColor.Green;
+                    else if (mezo == 'r') Console.ForegroundColor = ConsoleColor.Cyan;
+                    else Console.ForegroundColor = ConsoleColor.White;
+
+                    Console.Write(mezo);
+                    Console.ResetColor();
+
+                    if (j < oszlopok - 1)
+                    {
+                        Console.Write(' ');
+                    }
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
