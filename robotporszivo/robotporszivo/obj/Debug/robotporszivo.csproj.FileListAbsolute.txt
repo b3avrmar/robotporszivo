@@ -1,0 +1,7 @@
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\bin\Debug\robotporszivo.exe.config
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\bin\Debug\robotporszivo.exe
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\bin\Debug\robotporszivo.pdb
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.csproj.AssemblyReference.cache
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.csproj.CoreCompileInputs.cache
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.exe
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.pdb

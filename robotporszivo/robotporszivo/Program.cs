@@ -61,13 +61,6 @@ namespace robotporszivo
                     Console.WriteLine("Hiba: az ertekek 20 es 30 kozott legyenek.");
                     helyes = false;
                 }
-
-                if (helyes && sorokSzama == oszlopokSzama)
-                {
-                    Console.WriteLine("Hiba: a sorok es oszlopok szama nem lehet egyenlo.");
-                    helyes = false;
-                }
-
             } while (!helyes);
 
             // Palya generalas
