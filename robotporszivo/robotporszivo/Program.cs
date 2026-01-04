@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace robotporszivo
@@ -18,8 +19,17 @@ namespace robotporszivo
             PalyaMegjelenitese(palya);
 
             Console.WriteLine();
-            Console.WriteLine("Robot kezdo pozicio: sor=" + robotSor + " oszlop=" + robotOszlop);
-            Console.ReadLine();
+            Console.WriteLine("Robot kezdo pozicio: sor = " + robotSor + " oszlop = " + robotOszlop);
+            Console.WriteLine();
+            Console.WriteLine("Nyomjd meg az ENTER-t a takaritas inditasahoz...");
+            Console.ReadKey();
+
+            RobotTakaritas(palya, robotSor, robotOszlop);
+
+            Console.WriteLine();
+            Console.WriteLine("Takaritas befejezve!");
+            Console.WriteLine("Nyomjd meg az ENTER-t a kilepeshez...");
+            Console.ReadKey();
         }
 
         static char[,] PalyaLetrehozasa(out int robotSor, out int robotOszlop)
@@ -55,8 +65,7 @@ namespace robotporszivo
                     continue;
                 }
 
-                if (sorokSzama < 20 || sorokSzama > 30 ||
-                    oszlopokSzama < 20 || oszlopokSzama > 30)
+                if (sorokSzama < 20 || sorokSzama > 30 || oszlopokSzama < 20 || oszlopokSzama > 30)
                 {
                     Console.WriteLine("Hiba: az ertekek 20 es 30 kozott legyenek.");
                     helyes = false;
@@ -123,6 +132,7 @@ namespace robotporszivo
 
             return palya;
         }
+
         static void PalyaMegjelenitese(char[,] palya)
         {
             int sorok = palya.GetLength(0);
@@ -134,11 +144,24 @@ namespace robotporszivo
                 {
                     char mezo = palya[i, j];
 
-                    if (mezo == '-') Console.ForegroundColor = ConsoleColor.DarkGray;
-                    else if (mezo == 'b') Console.ForegroundColor = ConsoleColor.Red;
-                    else if (mezo == 'k') Console.ForegroundColor = ConsoleColor.Green;
-                    else if (mezo == 'r') Console.ForegroundColor = ConsoleColor.Cyan;
-                    else Console.ForegroundColor = ConsoleColor.White;
+                    switch (mezo)
+                    {
+                        case '-':
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            break;
+                        case 'b':
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            break;
+                        case 'k':
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            break;
+                        case 'r':
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.White;
+                            break;
+                    }
 
                     Console.Write(mezo);
                     Console.ResetColor();
@@ -151,5 +174,116 @@ namespace robotporszivo
                 Console.WriteLine();
             }
         }
+
+        static void RobotTakaritas(char[,] palya, int robotSor, int robotOszlop)
+        {
+            int sorok = palya.GetLength(0);
+            int oszlopok = palya.GetLength(1);
+            Random veletlen = new Random();
+            int felszedettKoszok = 0;
+            bool folytatodik = true;
+
+            do
+            {
+                // Lehetseges lepesek szamolasa
+                int[] lehetoSor = new int[4];
+                int[] lehetoOszlop = new int[4];
+                int[] lehetoIrany = new int[4];
+                int lehetsegesDb = 0;
+
+                if (robotSor > 0 && palya[robotSor - 1, robotOszlop] != 'b')
+                {
+                    lehetoSor[lehetsegesDb] = -1;
+                    lehetoOszlop[lehetsegesDb] = 0;
+                    lehetoIrany[lehetsegesDb] = 0;
+                    lehetsegesDb++;
+                }
+
+                if (robotSor < sorok - 1 && palya[robotSor + 1, robotOszlop] != 'b')
+                {
+                    lehetoSor[lehetsegesDb] = 1;
+                    lehetoOszlop[lehetsegesDb] = 0;
+                    lehetoIrany[lehetsegesDb] = 1;
+                    lehetsegesDb++;
+                }
+
+                if (robotOszlop > 0 && palya[robotSor, robotOszlop - 1] != 'b')
+                {
+                    lehetoSor[lehetsegesDb] = 0;
+                    lehetoOszlop[lehetsegesDb] = -1;
+                    lehetoIrany[lehetsegesDb] = 2;
+                    lehetsegesDb++;
+                }
+
+                if (robotOszlop < oszlopok - 1 && palya[robotSor, robotOszlop + 1] != 'b')
+                {
+                    lehetoSor[lehetsegesDb] = 0;
+                    lehetoOszlop[lehetsegesDb] = 1;
+                    lehetoIrany[lehetsegesDb] = 3;
+                    lehetsegesDb++;
+                }
+
+                // Ha nem tud lépni
+                if (lehetsegesDb == 0)
+                {
+                    Console.Clear();
+                    PalyaMegjelenitese(palya);
+                    Console.WriteLine();
+                    Console.WriteLine("A robot elakadt! Nincs tobb lehetseges lepes.");
+                    folytatodik = false;
+                }
+                // Ha tud lépni
+                else
+                {
+                    // Mozgás és takarítás
+                    int valasztott = veletlen.Next(lehetsegesDb);
+
+                    palya[robotSor, robotOszlop] = '-';
+
+                    robotSor += lehetoSor[valasztott];
+                    robotOszlop += lehetoOszlop[valasztott];
+                    int irany = lehetoIrany[valasztott];
+
+                    string iranySzoveg = "";
+                    switch (irany)
+                    {
+                        case 0:
+                            iranySzoveg = "FEL";
+                            break;
+                        case 1:
+                            iranySzoveg = "LE";
+                            break;
+                        case 2:
+                            iranySzoveg = "BALRA";
+                            break;
+                        case 3:
+                            iranySzoveg = "JOBBRA";
+                            break;
+                    }
+
+                    // Felszedett kosz kezelese
+                    bool koszVolt = (palya[robotSor, robotOszlop] == 'k');
+
+                    if (koszVolt)
+                    {
+                        felszedettKoszok++;
+                    }
+
+                    palya[robotSor, robotOszlop] = 'r';
+
+                    // Konzol torlese es aktualis allapot megjelenitese
+                    Console.Clear();
+                    PalyaMegjelenitese(palya);
+                    Console.WriteLine();
+
+                    Console.WriteLine("Robot lepett: " + iranySzoveg);
+                    Console.WriteLine("Osszes felszedett kosz: " + felszedettKoszok);
+                }
+                Thread.Sleep(5);
+
+            } while (true);
+        }
+
+        
     }
 }

@@ -5,3 +5,4 @@ Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robot
 Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.csproj.CoreCompileInputs.cache
 Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.exe
 Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.pdb
+Z:\Iskola\2025-2026\Asztali alk\1209\robotporszivo\robotporszivo\obj\Debug\robotporszivo.exe.config
