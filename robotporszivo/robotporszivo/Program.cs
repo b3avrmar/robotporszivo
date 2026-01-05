@@ -281,9 +281,92 @@ namespace robotporszivo
                 }
                 Thread.Sleep(5);
 
-            } while (true);
-        }
+                if (!VanElerhetoKosz(palya, robotSor, robotOszlop))
+                {
+                    Console.WriteLine("Minden elerheto kosz felszedve!");
+                    folytatodik = false;
+                }
 
-        
+            } while (folytatodik);
+        }
+        static bool VanElerhetoKosz(char[,] palya, int startSor, int startOszlop)
+        {
+            int sorok = palya.GetLength(0);
+            int oszlopok = palya.GetLength(1);
+
+            // BFS tombok hasznalataval
+            int maxMeret = sorok * oszlopok;
+            int[] sorQueue = new int[maxMeret];
+            int[] oszlopQueue = new int[maxMeret];
+            int queueEleje = 0;
+            int queueVege = 0;
+
+            bool[,] latogatott = new bool[sorok, oszlopok];
+
+            // Kezdo pozicio hozzaadasa
+            sorQueue[queueVege] = startSor;
+            oszlopQueue[queueVege] = startOszlop;
+            queueVege++;
+            latogatott[startSor, startOszlop] = true;
+
+            bool talalat = false;
+            bool vanElem = (queueEleje < queueVege);
+
+            do
+            {
+                int r = sorQueue[queueEleje];
+                int o = oszlopQueue[queueEleje];
+                queueEleje++;
+
+                // Ha talaltunk koszt, van meg elerheto
+                if (palya[r, o] == 'k')
+                {
+                    talalat = true;
+                }
+                else
+                {
+                    // Szomszedok ellenorzese - fel
+                    if (r > 0 && !latogatott[r - 1, o] && palya[r - 1, o] != 'b')
+                    {
+                        latogatott[r - 1, o] = true;
+                        sorQueue[queueVege] = r - 1;
+                        oszlopQueue[queueVege] = o;
+                        queueVege++;
+                    }
+
+                    // Le
+                    if (r < sorok - 1 && !latogatott[r + 1, o] && palya[r + 1, o] != 'b')
+                    {
+                        latogatott[r + 1, o] = true;
+                        sorQueue[queueVege] = r + 1;
+                        oszlopQueue[queueVege] = o;
+                        queueVege++;
+                    }
+
+                    // Balra
+                    if (o > 0 && !latogatott[r, o - 1] && palya[r, o - 1] != 'b')
+                    {
+                        latogatott[r, o - 1] = true;
+                        sorQueue[queueVege] = r;
+                        oszlopQueue[queueVege] = o - 1;
+                        queueVege++;
+                    }
+
+                    // Jobbra
+                    if (o < oszlopok - 1 && !latogatott[r, o + 1] && palya[r, o + 1] != 'b')
+                    {
+                        latogatott[r, o + 1] = true;
+                        sorQueue[queueVege] = r;
+                        oszlopQueue[queueVege] = o + 1;
+                        queueVege++;
+                    }
+                }
+
+                vanElem = (queueEleje < queueVege);
+
+            } while (vanElem && !talalat);
+
+            return talalat;
+        }
     }
 }
