@@ -26,8 +26,7 @@ namespace robotporszivo
 
             RobotTakaritas(palya, robotSor, robotOszlop);
 
-            Console.WriteLine();
-            Console.WriteLine("Takaritas befejezve!");
+            
             Console.WriteLine("Nyomjd meg az ENTER-t a kilepeshez...");
             Console.ReadKey();
         }
@@ -182,6 +181,22 @@ namespace robotporszivo
             Random veletlen = new Random();
             int felszedettKoszok = 0;
             bool folytatodik = true;
+            int lepesszam = 0;
+
+            Console.WriteLine("A takaritás elkezdődőtt!");
+
+            int kosszam = 0;
+
+            for (int i = 0; i < sorok; i++)
+            {
+                for (int j = 0; j < oszlopok; j++)
+                {
+                    if (palya[i, j] == 'k')
+                    {
+                        kosszam++;
+                    }
+                }
+            }
 
             do
             {
@@ -235,6 +250,8 @@ namespace robotporszivo
                 // Ha tud lépni
                 else
                 {
+                    lepesszam++;
+
                     // Mozgás és takarítás
                     int valasztott = veletlen.Next(lehetsegesDb);
 
@@ -272,14 +289,7 @@ namespace robotporszivo
                     palya[robotSor, robotOszlop] = 'r';
 
                     // Konzol torlese es aktualis allapot megjelenitese
-                    Console.Clear();
-                    PalyaMegjelenitese(palya);
-                    Console.WriteLine();
-
-                    Console.WriteLine("Robot lepett: " + iranySzoveg);
-                    Console.WriteLine("Osszes felszedett kosz: " + felszedettKoszok);
                 }
-                Thread.Sleep(5);
 
                 if (!VanElerhetoKosz(palya, robotSor, robotOszlop))
                 {
@@ -288,13 +298,23 @@ namespace robotporszivo
                 }
 
             } while (folytatodik);
+
+            Console.Clear();
+            Console.WriteLine();
+            PalyaMegjelenitese(palya);
+            Console.WriteLine();
+            Console.WriteLine("Takaritas befejezve!");
+            Console.WriteLine("Összes pályán található kosz száma: " + kosszam);
+            Console.WriteLine("Összes felszedett kosz száma: " + felszedettKoszok);
+            Console.WriteLine("A robot által nem felszedett koszok száma: " + (kosszam - felszedettKoszok));
+            Console.WriteLine("Összes lépés száma: " + lepesszam);
         }
         static bool VanElerhetoKosz(char[,] palya, int startSor, int startOszlop)
         {
             int sorok = palya.GetLength(0);
             int oszlopok = palya.GetLength(1);
 
-            // BFS tombok hasznalataval
+            // BFS tomb létrehozasa
             int maxMeret = sorok * oszlopok;
             int[] sorQueue = new int[maxMeret];
             int[] oszlopQueue = new int[maxMeret];
